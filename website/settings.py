@@ -35,11 +35,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
@@ -47,11 +44,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -90,23 +84,15 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 
-SESSION_COOKIE_AGE=utils.Expire
-
-MYSQL_HOST = utils.MYSQL_HOST
-MYSQL_PORT = utils.MYSQL_PORT
-MYSQL_USER = utils.MYSQL_USER
-MYSQL_PASS = utils.MYSQL_PASS
-MYSQL_DB = utils.MYSQL_DB
-
 DATABASES = {
     'default': {
 
         'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : MYSQL_DB,
-        'USER' : MYSQL_USER,
-        'PASSWORD' : MYSQL_PASS,
-        'HOST' : MYSQL_HOST,
-        'PORT' : MYSQL_PORT,
+        'NAME' : utils.MYSQL_DB,
+        'USER' : utils.MYSQL_USER,
+        'PASSWORD' : utils.MYSQL_PASS,
+        'HOST' : utils.MYSQL_HOST,
+        'PORT' : utils.MYSQL_PORT,
     }
 }
 

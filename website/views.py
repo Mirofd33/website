@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-#update:2014-08-30 by liufeily@163.com
+#auth:jusding
 
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse,HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
-from rest_framework import parsers, renderers
+from rest_framework import parsers, renderers, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
@@ -18,13 +13,8 @@ from website import utils
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-
-@login_required
-def Home(request):
-   return render_to_response('home.html',locals(),RequestContext(request))
-
-def About(request):
-   return render_to_response('about.html',locals(),RequestContext(request))
+from django.contrib.auth.models import User
+from website.serializers import UserSerializer
 
 #强制token超过一天过期，继承的rest的包
 class ObtainAuthToken(APIView):
@@ -53,3 +43,7 @@ obtain_auth_token = ObtainAuthToken.as_view()
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+        
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
