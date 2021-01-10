@@ -2,5 +2,137 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.conf import settings
+from django.utils.timezone import now,datetime
+from publisher.models import Project,projectToHost
+import datetime
+
 
 # Create your models here.
+ASSET_STATUS = (
+    (str(1), u"未使用"),
+    (str(2), u"已改主机名"),
+    (str(3), u"已重新接收key"),
+    (str(4), u"已使用"),
+    (str(5), u"其他"),
+    )
+
+ASSET_TYPE = (
+    (str(1), u"物理机"),
+    (str(2), u"虚拟机"),
+    )
+
+class env(models.Model):
+    env_id = models.IntegerField(u"环境ID",)
+    shortname = models.CharField(u"环境名称", max_length=30, null=True)
+    fullname = models.CharField(u"环境名称", max_length=30, null=True)
+
+    def __unicode__(self):
+        return self.fullname
+
+
+class Idc(models.Model):
+
+    name = models.CharField(u"机房名称", max_length=30, null=True)
+    address = models.CharField(u"机房地址", max_length=100, null=True)
+    tel = models.CharField(u"机房电话", max_length=30, null=True)
+    contact = models.CharField(u"客户经理", max_length=30, null=True)
+    contact_phone = models.CharField(u"移动电话", max_length=30, null=True)
+    jigui = models.CharField(u"机柜信息", max_length=30, null=True)
+    ip_range = models.CharField(u"IP范围", max_length=30, null=True)
+    bandwidth = models.CharField(u"接入带宽", max_length=30, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'数据中心配置'
+        verbose_name_plural = verbose_name
+
+
+class HostGroup(models.Model):
+    name = models.CharField(u"组名", max_length=30, unique=True)
+    desc = models.CharField(u"描述", max_length=100, null=True, blank=True)
+    class Meta:
+        verbose_name = u'设备组配置'
+        verbose_name_plural = verbose_name
+
+
+    def __unicode__(self):
+        return self.name
+
+class IpSource(models.Model):
+    vlan_id = models.IntegerField(u"VLAN_ID")
+    subnet = models.CharField(max_length=30,null=True)
+    describe = models.CharField(max_length=30,null=True)
+    env = models.ForeignKey(env,blank=True,null=True)
+    area = models.CharField(max_length=30,null=True)
+
+    def __unicode__(self):
+        return self.subnet
+
+    class Meta:
+        verbose_name = u'环境配置'
+        verbose_name_plural = verbose_name
+
+
+class Host(models.Model):
+    vip = models.GenericIPAddressField(u"VIP", max_length=15, null=True, blank=True)
+    hostname = models.CharField(max_length=50, verbose_name=u"主机名")
+    uuid = models.CharField(max_length=50, verbose_name=u"唯一编号", unique=True)
+    ip = models.GenericIPAddressField(u"IP", max_length=15)
+    env = models.ForeignKey(IpSource, verbose_name=u"所属环境", on_delete=models.SET_NULL, null=True, blank=True)
+    ilo_ip = models.GenericIPAddressField(u"其它IP", max_length=15, null=True, blank=True)
+    asset_no = models.CharField(u"固定资产编号", max_length=50, null=True, blank=True)
+    asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE, max_length=30, null=True, blank=True)
+    status = models.CharField(u"设备状态", choices=ASSET_STATUS, max_length=30, null=True, blank=True)
+    os = models.CharField(u"操作系统", max_length=100, null=True, blank=True)
+    kernel = models.CharField(u"系统版本", max_length=100, null=True, blank=True)
+    kernel_release = models.CharField(u"内核版本", max_length=100, null=True, blank=True)
+    vendor = models.CharField(u"设备厂商", max_length=50, null=True, blank=True)
+    cpu_model = models.CharField(u"CPU型号", max_length=100, null=True, blank=True)
+    cpu_num = models.IntegerField(u"CPU数量", null=True, blank=True)
+    memory = models.CharField(u"内存大小", max_length=30, null=True, blank=True)
+    disk = models.CharField(u"硬盘大小", max_length=255, null=True, blank=True)
+    disks = models.CharField(u"硬盘信息", max_length=255, null=True, blank=True)
+    sn = models.CharField(u"SN号 码", max_length=60, blank=True)
+    group = models.ForeignKey(HostGroup, verbose_name=u"设备组", blank=False,null=False)
+    idc = models.ForeignKey(Idc, verbose_name=u"所在数据中心", on_delete=models.SET_NULL, null=True, blank=True)
+    position = models.CharField(u"所在位置", max_length=100, null=True, blank=True)
+    memo = models.TextField(u"备注信息", max_length=200, null=True, blank=True)
+    project = models.ForeignKey(Project,verbose_name=u"项目组",blank=True,null=True,on_delete=models.SET_NULL)
+    terminal_time = models.DateTimeField(u'过期日期', null=True,blank=False)
+    create_time = models.DateTimeField(u'创建日期', default=now,blank=True)
+    update_time = models.DateTimeField(u'最后修改日期', auto_now=True,blank=True)
+    re_per = models.CharField(u"负责人", max_length=100, null=True, blank=True)
+    mac = models.CharField(u"mac地址", max_length=100, null=True, blank=True)
+      
+    def __unicode__(self):
+        return self.hostname
+
+    class Meta:
+        verbose_name = u'服务器配置'
+        verbose_name_plural = verbose_name
+
+
+class InterFace(models.Model):
+    name = models.CharField(max_length=30)
+    vendor = models.CharField(max_length=30,null=True)
+    bandwidth = models.CharField(max_length=30,null=True)
+    tel = models.CharField(max_length=30,null=True)
+    contact = models.CharField(max_length=30,null=True)
+    startdate = models.DateField()
+    enddate = models.DateField()
+    price = models.IntegerField(verbose_name=u'价格')
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'线路配置'
+        verbose_name_plural = verbose_name
+
+
+class Manufactory(models.Model):
+      vendor_name = models.CharField(max_length=30)
+      asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE, max_length=30, null=True, blank=True)

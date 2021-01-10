@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from website import utils
-import ldap
-from django_auth_ldap.config import LDAPSearch,ActiveDirectoryGroupType
+#import ldap
+#from django_auth_ldap.config import LDAPSearch,ActiveDirectoryGroupType
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'cmdb.apps.CmdbConfig',
+    'publisher.apps.PublisherConfig',
 ]
 
 MIDDLEWARE = [
@@ -86,18 +88,19 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 DATABASES = {
     'default': {
-
-        'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : utils.MYSQL_DB,
-        'USER' : utils.MYSQL_USER,
-        'PASSWORD' : utils.MYSQL_PASS,
-        'HOST' : utils.MYSQL_HOST,
-        'PORT' : utils.MYSQL_PORT,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE' : 'django.db.backends.mysql',
+        #'NAME' : utils.MYSQL_DB,
+        #'USER' : utils.MYSQL_USER,
+        #'PASSWORD' : utils.MYSQL_PASS,
+        #'HOST' : utils.MYSQL_HOST,
+        #'PORT' : utils.MYSQL_PORT,
     }
 }
 
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend', 
+    #'django_auth_ldap.backend.LDAPBackend', 
     'django.contrib.auth.backends.ModelBackend',
 ) 
 
@@ -147,7 +150,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
 )
-
+'''
 # ldap auth
 AUTH_LDAP_SERVER_URI = 'ldap://'+utils.LDAP_URL+':'+utils.LDAP_PORT
 AUTH_LDAP_BIND_DN = utils.LDAP_BIND
@@ -181,3 +184,4 @@ import logging
 logger = logging.getLogger('django_auth_ldap')
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
+'''
