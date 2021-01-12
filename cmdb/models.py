@@ -26,6 +26,11 @@ class env(models.Model):
     env_id = models.IntegerField(u"环境ID",)
     shortname = models.CharField(u"环境名称", max_length=30, null=True)
     fullname = models.CharField(u"环境名称", max_length=30, null=True)
+    jenkins_url = models.CharField(u"jenkins_url", max_length=100, null=True)
+    sftp_url = models.CharField(u"sftp_url", max_length=100, null=True)
+    jenkins_username = models.CharField(u"jenkins用户名", max_length=100, null=True)
+    jenkins_pwd = models.CharField(u"jenkins密码", max_length=100, null=True)
+    jenkins_port = models.CharField(u"jenkins端口", max_length=100, null=True)
 
     def __unicode__(self):
         return self.fullname
@@ -136,3 +141,18 @@ class InterFace(models.Model):
 class Manufactory(models.Model):
       vendor_name = models.CharField(max_length=30)
       asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE, max_length=30, null=True, blank=True)
+      
+      
+class jenkins_source(models.Model):
+    vlan_id = models.IntegerField(u"VLAN_ID")
+    subnet = models.CharField(max_length=30,null=True)
+    describe = models.CharField(max_length=30,null=True)
+    env = models.ForeignKey(env,blank=True,null=True)
+    area = models.CharField(max_length=30,null=True)
+
+    def __unicode__(self):
+        return self.subnet
+
+    class Meta:
+        verbose_name = u'环境配置'
+        verbose_name_plural = verbose_name

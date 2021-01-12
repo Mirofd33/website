@@ -8,6 +8,7 @@ from celery.worker.strategy import default
 from django.utils.timezone import now,datetime
 import datetime
 
+
 # Create your models here.
 #已迁移数据库，将删除
 PORJECT_TYPE = (
@@ -129,7 +130,7 @@ class Project(models.Model):
     rchost = models.CharField(u"RC主机", max_length=100, blank=True,null=True)
     status = models.CharField(u"项目状态", choices=PROJECT_STATUS, max_length=30, null=True, blank=True)
     createTime = models.DateTimeField(blank=True,null=True)
-    name_en = models.CharField(u"英文名", max_length=30, unique=True)
+    name_en = models.CharField(u"英文名", max_length=100)
     projectType = models.ForeignKey(projectType,verbose_name=u"项目类型",blank=True,null=True,on_delete=models.SET_NULL)
     
     
@@ -188,6 +189,9 @@ class version(models.Model):
     createTime = models.DateTimeField(blank=True,null=True)
     finishTime = models.DateTimeField(blank=True,null=True)
     status = models.CharField(u"构建状态", choices=BUILD_STATUS, max_length=30, null=True, blank=True)
-    lastbuildinfo = models.CharField(u"最后构建信息", max_length=500, null=True, blank=True)
+    #lastbuildinfo = models.CharField(u"最后构建信息", max_length=500, null=True, blank=True)
+    bagName = models.CharField(u"包名",max_length=100, null=True, blank=True)
+    
+
     
     
