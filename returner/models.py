@@ -1,6 +1,5 @@
 from django.db import models
-from datetime import datetime
-from time import strftime
+
 
 class Jids(models.Model):
     class Meta:

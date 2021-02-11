@@ -18,9 +18,11 @@ from django.contrib import admin
 from website import views
 from rest_framework import routers
 from website.views import UserViewSet
+from cmdb.views import HostViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'hosts', HostViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

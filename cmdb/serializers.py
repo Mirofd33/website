@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from cmdb.models import Host
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from cmdb.models import *

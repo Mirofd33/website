@@ -1,8 +1,7 @@
 import socket,struct
-from cmdb.models import Host,IpSource,Manufactory,jenkins_source
-from returner.models import Salt_grains
+from cmdb.models import IpSource,Manufactory,jenkins_source
 import re
-from celery import task
+
 
 def format_subnet(subnet_input):
     # netmask auto-append

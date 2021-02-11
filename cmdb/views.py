@@ -13,27 +13,6 @@ from publisher.models import projectToHost,serviceType
 
 
 # Create your views here.
-@login_required
-def List_Host(request):
-    if request.method == "GET":
-        switch = {
-            "/cmdb/host_add/":"cmdb/host.add.html",
-            "/cmdb/host_list/":"cmdb/host.rest.list.html",
-            "/cmdb/host_edit/":"cmdb/host.edit.html",
-            "/cmdb/host_view/":"cmdb/host.view.html",
-        }
-        source_d = env.objects.all()
-        hostgroup_d = HostGroup.objects.all()
-        project_d = projectToHost.objects.all()
-        #owner_d = User.objects.all()
-        ks = {
-            'source': source_d,
-            'project': project_d.distinct(),
-            'group': hostgroup_d,
-            #'owner':owner_d,
-            'typeList':serviceType.objects.all(),
-            }
-    return render(request, switch[request.path], ks)
 
 
 def constructQueryDic(data):
