@@ -1,11 +1,15 @@
 eclipse.preferences.version=1
 encoding//cmdb/admin.py=utf-8
 encoding//cmdb/apps.py=utf-8
+encoding//cmdb/envviews.py=utf-8
 encoding//cmdb/models.py=utf-8
+encoding//cmdb/serializers.py=utf-8
 encoding//cmdb/tests.py=utf-8
 encoding//cmdb/views.py=utf-8
 encoding//publisher/apps.py=utf-8
 encoding//publisher/models.py=utf-8
+encoding//publisher/tests.py=utf-8
+encoding//returner/models.py=utf-8
 encoding//website/serializers.py=utf-8
 encoding//website/settings.py=utf-8
 encoding//website/tokenAuth.py=utf-8

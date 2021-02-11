@@ -1,0 +1,12 @@
+workers = 4
+bind = '10.32.24.8:8888'
+backlog = 2048
+timeout = 6000
+keepalive = 6000
+errorlog = '../error.log'
+loglevel = 'info'
+accesslog = '../access.log'
+worker_class = 'gevent'
+captureoutput =True
+worker_connections = 1000
+threads = 2
