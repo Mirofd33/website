@@ -1,11 +1,11 @@
 #-*- coding: utf-8 -*-
 
 #MYSQL
-MYSQL_HOST = '10.42.0.19'
+MYSQL_HOST = '10.42.0.20'
 MYSQL_PORT = '3306'
 MYSQL_USER = 'ops1'
 MYSQL_PASS = 'MyNewPass4!'
-MYSQL_DB = 'cmdb'
+MYSQL_DB = 'new_cmdb'
 
 #SALT
 SALT_API_URL = 'salt'

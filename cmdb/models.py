@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.conf import settings
-from django.utils.timezone import now,datetime
-from publisher.models import Project,projectToHost
-import datetime
+from django.utils.timezone import now
+from publisher.models import Project
 
 
 # Create your models here.
@@ -109,8 +108,12 @@ class Host(models.Model):
     terminal_time = models.DateTimeField(u'过期日期', null=True,blank=False)
     create_time = models.DateTimeField(u'创建日期', default=now,blank=True)
     update_time = models.DateTimeField(u'最后修改日期', auto_now=True,blank=True)
-    re_per = models.CharField(u"负责人", max_length=100, null=True, blank=True)
+    re_per = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=u"负责人",blank=True,null=True,on_delete=models.SET_NULL)#models.CharField(u"负责人", max_length=100, null=True, blank=True)
     mac = models.CharField(u"mac地址", max_length=100, null=True, blank=True)
+    escode = models.CharField(u"快速服务代码", max_length=100, null=True, blank=True)
+    uplink = models.CharField(u"上联端口", max_length=100, null=True, blank=True)
+    housecode = models.CharField(u"机房编号", max_length=100, null=True, blank=True) 
+    server_id = models.CharField(u"服务器ID", max_length=100, null=True, blank=True)
       
     def __unicode__(self):
         return self.hostname
@@ -139,8 +142,8 @@ class InterFace(models.Model):
 
 
 class Manufactory(models.Model):
-      vendor_name = models.CharField(max_length=30)
-      asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE, max_length=30, null=True, blank=True)
+    vendor_name = models.CharField(max_length=30)
+    asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE, max_length=30, null=True, blank=True)
       
       
 class jenkins_source(models.Model):
@@ -154,5 +157,6 @@ class jenkins_source(models.Model):
         return self.subnet
 
     class Meta:
-        verbose_name = u'环境配置'
+        verbose_name = u'jenkins配置'
         verbose_name_plural = verbose_name
+        
