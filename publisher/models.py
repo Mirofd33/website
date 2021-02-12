@@ -7,19 +7,6 @@ from django.utils.timezone import now
 
 
 # Create your models here.
-#已迁移数据库，将删除
-PORJECT_TYPE = (
-    ('0', u"war"),
-    ('1', u"j7t8"),
-    ('2', u"php"),
-    ('3', u"ruby"),
-    ('4', u"python"),
-    ('5', u"base"),
-    ('6', u"nginx"),
-    ('7', u"sftp"),
-    ('8', u"edge"),
-    ('9', u"j7"),
-    )
 
 PROJECT_STATUS = (
     ('0', u"未初始化"),
@@ -48,29 +35,10 @@ PROJECT_NATURE = (
     ('0', u"一般项目"),
     ('1', u"重要项目"),
     )
-#包管理models
-class package(models.Model):
-    name = models.CharField(u"包名", max_length=100, null=False, blank=True)
-    lastTime = models.DateTimeField(blank=True,null=True)
-    createTime = models.DateTimeField(blank=True,null=True)
-    countPackage = models.CharField(u"包数量", max_length=100, null=True, blank=True)
-    status = models.CharField(u"包状态", choices=PACKAGE_STATUS, max_length=30, null=True, blank=True)
-    env = models.IntegerField()
-    
-    def __unicode__(self):
-        return self.name
+
     
 #服务管理models
-#旧字段，已迁移数据库，将删除
-SERVICE_TYPE = (
-    ('0', u"NGINX"),
-    ('1', u"SALT"),
-    ('2', u"RABBITMQ"),
-    ('3', u"LDAP"),
-    ('4', u"CELERY"),
-    ('5', u"DB"),
-    ('6', u"WEB"),
-    )
+
 SERVICE_STATUS = (
     ('0', u"未初始化"),
     ('1', u"已初始化"),
@@ -104,7 +72,6 @@ class service(models.Model):
     ip = models.CharField(u"ip", max_length=100, null=True, blank=True)
     innerUrl = models.CharField(u"url", max_length=100, null=True, blank=True)
     innerIp = models.CharField(u"ip", max_length=100, null=True, blank=True)
-    #type = models.CharField(u"类型", choices=SERVICE_TYPE, max_length=30, null=True, blank=True)#旧字段，将删
     env = models.IntegerField(verbose_name=u"服务环境",blank=True,null=True)
     hosts = models.CharField(u"主机", max_length=100, null=True, blank=True)
     status = models.CharField(u"状态", choices=SERVICE_STATUS, max_length=30, null=True, blank=True)
@@ -129,10 +96,8 @@ class Project(models.Model):
     url = models.CharField(max_length=300,verbose_name=u'菜单url地址',null=True,blank=True,default='javascript:void(0)',help_text=u'是否给菜单设置一个url地址')
     priority = models.IntegerField(verbose_name=u'显示优先级',null=True,blank=True,default=-1,help_text=u'菜单的显示顺序，优先级越大显示越靠前')
     permission_id = models.IntegerField(verbose_name=u'权限编号',help_text=u'给菜单设置一个编号，用于权限控制',error_messages={'field-permission_id': u'只能输入数字'})
-    #type = models.CharField(u"项目类型", choices=PORJECT_TYPE, max_length=30, null=True, blank=True)
     service = models.CharField(u"服务", max_length=100, blank=True,null=True)
     describe = models.CharField(u"描述", max_length=100,blank=True,null=True)
-    #package = models.ForeignKey(package,verbose_name=u"项目包名",blank=True,null=True,related_name="pkg",on_delete=models.SET_NULL)
     env = models.IntegerField(verbose_name=u"服务环境",blank=True,null=True)
     rchost = models.CharField(u"RC主机", max_length=100, blank=True,null=True)
     status = models.CharField(u"项目状态", choices=PROJECT_STATUS, max_length=30, null=True, blank=True)
@@ -172,7 +137,6 @@ class version(models.Model):
     createTime = models.DateTimeField(blank=True,null=True)
     finishTime = models.DateTimeField(blank=True,null=True)
     status = models.CharField(u"构建状态", choices=BUILD_STATUS, max_length=30, null=True, blank=True)
-    #lastbuildinfo = models.CharField(u"最后构建信息", max_length=500, null=True, blank=True)
     bagName = models.CharField(u"包名",max_length=100, null=True, blank=True)
     
 class pubcmd(models.Model):
@@ -186,7 +150,6 @@ class pubcmd(models.Model):
 #发布管理models  
 class publisher(models.Model):
     Project = models.ForeignKey(Project,verbose_name=u"项目名称",blank=False,null=True)
-    package = models.ForeignKey(package,verbose_name=u"包名称",blank=True,null=True)
     version = models.ForeignKey(version,verbose_name=u"构建版本",blank=True,null=True)
     publish_no = models.CharField(u"发布号", max_length=100, blank=True,null=True)
     createTime = models.DateTimeField(default=now,blank=True,null=True)
@@ -204,14 +167,6 @@ class publisherToHost(models.Model):
     publisher = models.ForeignKey(publisher,verbose_name=u"发布名称",blank=True,null=True)
     host = models.IntegerField()
     
-    
-class host_name(models.Model):
-    name = models.CharField(u"包版本", max_length=100, blank=True,null=True)
-    Project = models.ForeignKey(Project,verbose_name=u"项目名称",blank=True,null=True)
-    test = models.CharField(u"tet", max_length=100, blank=True,null=True)
-    
-    def __unicode__(self):
-        return self.name
     
 class version_backup(models.Model):
     build_number = models.CharField(u"构建号", max_length=100, null=True, blank=True)

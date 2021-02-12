@@ -1,5 +1,3 @@
-from django.conf.urls import  url
-import views
 from cmdb.views import HostViewSet
 
 host_list = HostViewSet.as_view({
