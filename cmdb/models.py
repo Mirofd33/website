@@ -31,9 +31,6 @@ class env(models.Model):
     jenkins_pwd = models.CharField(u"jenkins密码", max_length=100, null=True)
     jenkins_port = models.CharField(u"jenkins端口", max_length=100, null=True)
 
-    def __unicode__(self):
-        return self.fullname
-
 
 class Idc(models.Model):
 
@@ -45,9 +42,7 @@ class Idc(models.Model):
     jigui = models.CharField(u"机柜信息", max_length=30, null=True)
     ip_range = models.CharField(u"IP范围", max_length=30, null=True)
     bandwidth = models.CharField(u"接入带宽", max_length=30, null=True)
-
-    def __unicode__(self):
-        return self.name
+    
 
     class Meta:
         verbose_name = u'数据中心配置'
@@ -62,9 +57,6 @@ class HostGroup(models.Model):
         verbose_name_plural = verbose_name
 
 
-    def __unicode__(self):
-        return self.name
-
 class IpSource(models.Model):
     vlan_id = models.IntegerField(u"VLAN_ID")
     subnet = models.CharField(max_length=30,null=True)
@@ -72,8 +64,6 @@ class IpSource(models.Model):
     env = models.ForeignKey(env,blank=True,null=True)
     area = models.CharField(max_length=30,null=True)
 
-    def __unicode__(self):
-        return self.subnet
 
     class Meta:
         verbose_name = u'环境配置'
@@ -115,8 +105,6 @@ class Host(models.Model):
     housecode = models.CharField(u"机房编号", max_length=100, null=True, blank=True) 
     server_id = models.CharField(u"服务器ID", max_length=100, null=True, blank=True)
       
-    def __unicode__(self):
-        return self.hostname
 
     class Meta:
         verbose_name = u'服务器配置'
@@ -133,8 +121,6 @@ class InterFace(models.Model):
     enddate = models.DateField()
     price = models.IntegerField(verbose_name=u'价格')
 
-    def __unicode__(self):
-        return self.name
 
     class Meta:
         verbose_name = u'线路配置'
@@ -153,8 +139,6 @@ class jenkins_source(models.Model):
     env = models.ForeignKey(env,blank=True,null=True)
     area = models.CharField(max_length=30,null=True)
 
-    def __unicode__(self):
-        return self.subnet
 
     class Meta:
         verbose_name = u'jenkins配置'

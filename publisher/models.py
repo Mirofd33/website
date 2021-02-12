@@ -108,17 +108,12 @@ class Project(models.Model):
     project_nature = models.CharField(u"项目属性", choices=PROJECT_NATURE, max_length=30, null=True, blank=True)
     jid = models.CharField(u"任务编号", max_length=255, blank=True,null=True)
     
-    
-    def __str__(self):
-        return "{parent}{name}".format(name=self.name, parent="%s-->" % self.parent.name if self.parent else '')
 
     class Meta:
         verbose_name = u"项目配置"
         verbose_name_plural = u"项目配置"
         ordering = ["-priority", "id"]
 
-    def __unicode__(self):
-        return self.name
     
 class projectToHost(models.Model):
     Project = models.ForeignKey(Project,verbose_name=u"项目名称",blank=True,null=True)
