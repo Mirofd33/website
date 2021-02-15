@@ -151,7 +151,7 @@ AUTH_LDAP_USER_SEARCH = LDAPSearch(OU, ldap.SCOPE_SUBTREE, "(sAMAccountName=%(us
 
 AUTH_LDAP_USER_ATTR_MAP = {  
     "first_name": "givenName",
-    "nickname": "cn",
+    "last_name": "cn",
     "username": "givenName",
 }
 
