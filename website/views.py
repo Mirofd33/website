@@ -6,7 +6,6 @@ from rest_framework import parsers, renderers, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.utils import timezone
 from datetime import timedelta
 from website import utils
@@ -15,6 +14,9 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 from website.serializers import UserSerializer
+from django.apps import apps
+from rest_framework.views import APIView
+import json
 
 #强制token超过一天过期，继承的rest的包
 class ObtainAuthToken(APIView):
@@ -47,3 +49,25 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class listmodels(APIView):
+
+    def get(self, request):
+        #获取model的verbose_name和name的字段
+        appname = request.GET['appname']
+        modelname = request.GET['modelname']
+        exclude = {}
+
+        if appname and modelname:
+            modelobj = apps.get_model(appname, modelname)
+            filed = modelobj._meta.fields
+            fielddic = []
+            params = [f for f in filed if f.name not in exclude]
+            for i in params:
+                #fielddic[i.name] = i.verbose_name
+                fielddic.append({
+                    'text':i.name,
+                    'value':i.verbose_name
+                })
+        return Response(json.dumps(fielddic))
+

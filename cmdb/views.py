@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+
 from django.core.paginator import Paginator
 from django.db.models import Q
 from cmdb.models import *
@@ -8,9 +8,7 @@ from cmdb.serializers import HostSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth.decorators import login_required
-from publisher.models import projectToHost,serviceType
-
+from publisher.models import projectToHost
 
 # Create your views here.
 
