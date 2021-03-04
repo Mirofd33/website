@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.timezone import now
 from publisher.models import Project
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -80,7 +81,7 @@ class Host(models.Model):
     escode = models.CharField(u"快速服务代码", max_length=100, null=True, blank=True)
     project = models.ForeignKey(Project, verbose_name=u"项目组", blank=True, null=True, on_delete=models.SET_NULL)
     update_time = models.DateTimeField(u'最后修改日期', auto_now=True, blank=True)
-    re_per = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u"负责人", blank=True, null=True, on_delete=models.SET_NULL)
+    re_per = models.ForeignKey(User, verbose_name=u"负责人", blank=True, null=True, on_delete=models.SET_NULL)
     status = models.CharField(u"设备状态", choices=ASSET_STATUS, max_length=30, null=True, blank=True)
     uuid = models.CharField(max_length=50, verbose_name=u"唯一编号", unique=True)
     env = models.ForeignKey(IpSource, verbose_name=u"所属环境", on_delete=models.SET_NULL, null=True, blank=True)
@@ -100,7 +101,6 @@ class Host(models.Model):
     memo = models.TextField(u"备注信息", max_length=200, null=True, blank=True)
     terminal_time = models.DateTimeField(u'过期日期', null=True,blank=False)
     create_time = models.DateTimeField(u'创建日期', default=now,blank=True)
-    #models.CharField(u"负责人", max_length=100, null=True, blank=True)
     mac = models.CharField(u"mac地址", max_length=100, null=True, blank=True)
     uplink = models.CharField(u"上联端口", max_length=100, null=True, blank=True)
     housecode = models.CharField(u"机房编号", max_length=100, null=True, blank=True) 

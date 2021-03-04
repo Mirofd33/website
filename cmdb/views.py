@@ -10,9 +10,8 @@ from rest_framework import status
 from publisher.models import projectToHost
 
 
-
 # Create your views here.
-def constructQueryDic(data):
+def construct_query_dic(data):
     conditions = {}
 
     start_time = data.get('start_time')
@@ -48,7 +47,7 @@ def constructQueryDic(data):
     return conditions
 
 
-def searchQueryDic(data):
+def search_query_dic(data):
     conditions = {
         "hostname__contains": data,
         "ip__contains": data,
@@ -67,21 +66,21 @@ class HostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.method == "GET":
-            # bootstrap-table全家桶
+            # vue全家桶
             search = request.GET.get('search')
             sort = request.GET.get('sortBy')
             limit = request.GET.get('rowsPerPage') if request.GET.get('rowsPerPage') else 10
             offset = request.GET.get('page') if request.GET.get('page') else 1
             descending = request.GET.get('descending')
             # 固定搜索条件对象处理集合
-            conditions = constructQueryDic(request.GET)
+            conditions = construct_query_dic(request.GET)
             qc = Q()
             qs = Q()
             for j in conditions:
                 qc.add(Q(**{j: conditions[j]}), Q.AND)
             # 动态搜索条件对象处理集合
             if search:
-                search_conditions = searchQueryDic(search)
+                search_conditions = search_query_dic(search)
                 for i in search_conditions:
                     qs.add(Q(**{i: search_conditions[i]}), Q.OR)
             all_records = Host.objects.filter(qc, qs)
