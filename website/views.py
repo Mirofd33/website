@@ -56,7 +56,7 @@ class listmodels(APIView):
         #获取model的verbose_name和name的字段
         appname = request.GET['appname']
         modelname = request.GET['modelname']
-        exclude = {}
+        exclude = {'disks'}
 
         if appname and modelname:
             modelobj = apps.get_model(appname, modelname)
@@ -66,8 +66,8 @@ class listmodels(APIView):
             for i in params:
                 #fielddic[i.name] = i.verbose_name
                 fielddic.append({
-                    'text':i.name,
-                    'value':i.verbose_name
+                    'value': i.name,
+                    'text': i.verbose_name,
                 })
         return Response(json.dumps(fielddic))
 
