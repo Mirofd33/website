@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
-from django.conf import settings
 from django.utils.timezone import now
 from publisher.models import Project
 from django.contrib.auth.models import User
@@ -79,7 +77,7 @@ class Host(models.Model):
     disk = models.CharField(u"硬盘大小", max_length=255, null=True, blank=True)
     position = models.CharField(u"所在位置", max_length=100, null=True, blank=True)
     escode = models.CharField(u"快速服务代码", max_length=100, null=True, blank=True)
-    project = models.ForeignKey(Project, verbose_name=u"项目组", blank=True, null=True, on_delete=models.SET_NULL)
+    # project = models.ForeignKey(Project, verbose_name=u"项目组", blank=True, null=True, on_delete=models.SET_NULL)
     update_time = models.DateTimeField(u'最后修改日期', auto_now=True, blank=True)
     re_per = models.ForeignKey(User, verbose_name=u"负责人", blank=True, null=True, on_delete=models.SET_NULL)
     status = models.CharField(u"设备状态", choices=ASSET_STATUS, max_length=30, null=True, blank=True)
