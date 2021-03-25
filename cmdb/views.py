@@ -17,35 +17,31 @@ from cmdb.models import ASSET_STATUS, ASSET_TYPE
 def construct_query_dic(data):
     conditions = {}
 
-    start_time = data.get('start_time')
-    end_time = data.get('end_time')
+    start_time = data.get('sdate')
+    end_time = data.get('edate')
     if start_time or end_time:
-        if len(start_time) > 0 and len(end_time) > 0:
+        if start_time and end_time:
             conditions['create_time__range'] = (start_time, end_time)
-        if len(start_time) > 0 and len(end_time) == 0:
+        if start_time:
             conditions['create_time__gte'] = start_time
-        if len(start_time) == 0 and len(end_time) > 0:
+        if end_time:
             conditions['create_time__lte'] = end_time
 
-    vlan_type = data.get('vlan_type')
+    vlan_type = data.get('env')
     if vlan_type:
-        if len(vlan_type) > 0 and vlan_type != '0':
-            conditions['env_id__in'] = IpSource.objects.filter(env__in=vlan_type)
+        conditions['env_id__in'] = IpSource.objects.filter(env__in=vlan_type)
 
-    project_type = data.get('project_type')
+    project_type = data.get('prjname')
     if project_type:
-        if len(project_type) > 0 and project_type != '0':
-            conditions['id'] = projectToHost.objects.get(Project_id=project_type).host
+        conditions['id'] = projectToHost.objects.get(Project_id=project_type).host
 
-    status_type = data.get('status_type')
+    status_type = data.get('status')
     if status_type:
-        if len(status_type) > 0 and status_type != '0':
-            conditions['status'] = status_type
+        conditions['status'] = status_type
 
-    asset_search = data.get('asset_search')
+    asset_search = data.get('type')
     if asset_search:
-        if len(asset_search) > 0 and asset_search != '0':
-            conditions['asset_type'] = asset_search
+        conditions['asset_type'] = asset_search
 
     return conditions
 
@@ -99,7 +95,6 @@ class HostViewSet(viewsets.ModelViewSet):
             page = int(offset)
             sl = self.get_serializer(pageinator.page(page), many=True)
             response_data = {'total': all_records.count(), 'rows': sl.data}
-
             return Response(response_data)
 
 
@@ -144,7 +139,7 @@ class HostViewSet(viewsets.ModelViewSet):
             'status': change_metadata(ASSET_STATUS),
             'type': change_metadata(ASSET_TYPE),
             'env': change_metadata(env.objects.values_list('id', 'fullname')),
-            'prjname': change_metadata(Project.objects.values_list('id', 'name').order_by('-id'))
+            'prjname': change_metadata(Project.objects.filter(id__in=projectToHost.objects.values('Project').distinct()).values_list('id', 'name').order_by('-id'))
         }
         return Response(json.dumps(response_data))
 
