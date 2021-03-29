@@ -1,4 +1,4 @@
-import socket,struct
+import socket, struct
 from cmdb.models import IpSource,Manufactory,jenkins_source
 import re
 
@@ -39,6 +39,7 @@ def format_subnet(subnet_input):
                       + "/" + subnet_array[1]
         return subnet_true
 
+
 def ip_in_subnet(ip, subnet):
     subnet = format_subnet(str(subnet))
     subnet_array = subnet.split("/")
@@ -56,6 +57,7 @@ def env_dispatch(host_ip):
             ipsource = 1
     return ipsource
 
+
 def jenkins_env_dispatch(host_ip):
     env_list = jenkins_source.objects.all()
     for iplist in env_list:
@@ -65,6 +67,7 @@ def jenkins_env_dispatch(host_ip):
         else:
             ipsource = 1
     return ipsource
+
 
 def Manufactory_dispatch(host_manufacturer):
     list = Manufactory.objects.all()
@@ -76,4 +79,14 @@ def Manufactory_dispatch(host_manufacturer):
         else:
             type = 1
     return type
+
+
+def change_metadata(medadata):
+    new_meta = []
+    for i in medadata:
+        new_meta.append({
+            'text': i[1],
+            'value': i[0]
+        })
+    return new_meta
 

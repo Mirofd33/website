@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from cmdb.models import Host
-from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
-from cmdb.models import *
-import time
+from cmdb.models import Host, ASSET_STATUS, ASSET_TYPE
 from publisher.models import projectToHost, serviceToHost
 
 
@@ -17,6 +13,11 @@ class HostSerializer(serializers.ModelSerializer):
     env = serializers.SerializerMethodField()
     re_per = serializers.SerializerMethodField()
     update_time = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    asset_type = serializers.SerializerMethodField()
+    prjname = serializers.SerializerMethodField()
+    srvname = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Host
@@ -30,6 +31,20 @@ class HostSerializer(serializers.ModelSerializer):
 
     def get_update_time(self, obj):
         return obj.update_time.strftime("%Y-%m-%d %H:%M:%S")
+
+    def get_status(self, obj):
+        return dict(ASSET_STATUS)[str(obj.status)] if obj.status else "0"
+
+    def get_asset_type(self, obj):
+        return dict(ASSET_TYPE)[str(obj.asset_type)] if obj.status else "0"
+
+    def get_prjname(self, obj):
+        pn = projectToHost.objects.filter(host=obj.id)
+        return pn[0].Project.name if pn.count() > 0 else "0"
+
+    def get_srvname(self, obj):
+        pn = serviceToHost.objects.filter(host=obj.id)
+        return pn[0].service.name if pn.count() > 0 else "0"
 
     def __init__(self, *args, **kwargs):
         super(HostSerializer, self).__init__(*args, **kwargs)

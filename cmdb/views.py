@@ -2,7 +2,7 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
 from cmdb.models import *
-from utils import env_dispatch
+from utils import env_dispatch, change_metadata
 from cmdb.serializers import HostSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -11,6 +11,7 @@ from publisher.models import projectToHost, Project
 import json
 from rest_framework.decorators import list_route
 from cmdb.models import ASSET_STATUS, ASSET_TYPE
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -139,17 +140,8 @@ class HostViewSet(viewsets.ModelViewSet):
             'status': change_metadata(ASSET_STATUS),
             'type': change_metadata(ASSET_TYPE),
             'env': change_metadata(env.objects.values_list('id', 'fullname')),
-            'prjname': change_metadata(Project.objects.filter(id__in=projectToHost.objects.values('Project').distinct()).values_list('id', 'name').order_by('-id'))
+            'prjname': change_metadata(Project.objects.filter(id__in=projectToHost.objects.values('Project').distinct()).values_list('id', 'name').order_by('-id')),
+            're_per': change_metadata(User.objects.values_list('id', 'first_name'))
         }
         return Response(json.dumps(response_data))
-
-
-def change_metadata(medadata):
-    new_meta = []
-    for i in medadata:
-        new_meta.append({
-            'text': i[1],
-            'value': i[0]
-        })
-    return new_meta
 
