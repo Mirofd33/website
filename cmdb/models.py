@@ -70,7 +70,7 @@ class IpSource(models.Model):
 
 
 class Host(models.Model):
-    hostname = models.CharField(max_length=50, verbose_name=u"主机名")
+    hostname = models.CharField(max_length=50, help_text=1, verbose_name=u"主机名")
     ip = models.GenericIPAddressField(u"IP", max_length=15)
     cpu_num = models.IntegerField(u"CPU数量", null=True, blank=True)
     memory = models.CharField(u"内存大小", max_length=30, null=True, blank=True)
@@ -93,12 +93,12 @@ class Host(models.Model):
     cpu_model = models.CharField(u"CPU型号", max_length=100, null=True, blank=True)
     vip = models.GenericIPAddressField(u"VIP", max_length=15, null=True, blank=True)
     disks = models.CharField(u"硬盘信息", max_length=255, null=True, blank=True)
-    sn = models.CharField(u"SN号 码", max_length=60, blank=True)
-    group = models.ForeignKey(HostGroup, verbose_name=u"设备组", blank=False,null=False)
-    idc = models.ForeignKey(Idc, verbose_name=u"所在数据中心", on_delete=models.SET_NULL, null=True, blank=True)
+    sn = models.CharField(u"SN号 码", max_length=60, blank=True, null=True)
+    group = models.ForeignKey(HostGroup, default=1, verbose_name=u"设备组", blank=True, null=True)
+    idc = models.ForeignKey(Idc, verbose_name=u"所在数据中心", default=1, on_delete=models.SET_NULL, null=True, blank=True)
     memo = models.TextField(u"备注信息", max_length=200, null=True, blank=True)
     terminal_time = models.DateTimeField(u'过期日期', null=True,blank=False)
-    create_time = models.DateTimeField(u'创建日期', default=now,blank=True)
+    create_time = models.DateTimeField(u'创建日期', default=now, blank=True, null=True,)
     mac = models.CharField(u"mac地址", max_length=100, null=True, blank=True)
     uplink = models.CharField(u"上联端口", max_length=100, null=True, blank=True)
     housecode = models.CharField(u"机房编号", max_length=100, null=True, blank=True) 

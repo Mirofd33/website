@@ -98,10 +98,9 @@ class HostViewSet(viewsets.ModelViewSet):
             response_data = {'total': all_records.count(), 'rows': sl.data}
             return Response(response_data)
 
-
-
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        print request.data
+        serializer = self.get_serializer(data=request.data['params'])
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['env'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
         self.perform_create(serializer)
