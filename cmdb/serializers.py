@@ -7,7 +7,7 @@ from publisher.models import projectToHost, serviceToHost
 rexNum = "^[0-9]*$"
 
 
-class HostSerializer(serializers.ModelSerializer):
+class ListHostSerializer(serializers.ModelSerializer):
     # owner = serializers.ReadOnlyField(source='owner.username')
     # 定义临时字段，临时存储显示
     env = serializers.SerializerMethodField()
@@ -36,7 +36,7 @@ class HostSerializer(serializers.ModelSerializer):
         return dict(ASSET_STATUS)[str(obj.status)] if obj.status else "0"
 
     def get_asset_type(self, obj):
-        return dict(ASSET_TYPE)[str(obj.asset_type)] if obj.status else "0"
+        return dict(ASSET_TYPE)[str(obj.asset_type)] if obj.asset_type else "0"
 
     def get_prjname(self, obj):
         pn = projectToHost.objects.filter(host=obj.id)
@@ -47,10 +47,14 @@ class HostSerializer(serializers.ModelSerializer):
         return pn[0].service.name if pn.count() > 0 else "0"
 
     def __init__(self, *args, **kwargs):
+        super(ListHostSerializer, self).__init__(*args, **kwargs)
+
+
+class HostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Host
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
         super(HostSerializer, self).__init__(*args, **kwargs)
-
-
-
-
-
-

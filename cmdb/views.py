@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from cmdb.models import *
 from utils import env_dispatch, change_metadata
-from cmdb.serializers import HostSerializer
+from cmdb.serializers import HostSerializer, ListHostSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -94,12 +94,13 @@ class HostViewSet(viewsets.ModelViewSet):
             # 分页
             pageinator = Paginator(all_records, limit)
             page = int(offset)
+            self.serializer_class = ListHostSerializer
             sl = self.get_serializer(pageinator.page(page), many=True)
+
             response_data = {'total': all_records.count(), 'rows': sl.data}
             return Response(response_data)
 
     def create(self, request, *args, **kwargs):
-        print request.data
         serializer = self.get_serializer(data=request.data['params'])
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['env'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
@@ -107,13 +108,17 @@ class HostViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(instance, data=request.data['params'], partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['env'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
-        # serializer.validated_data['idc'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
         self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):

@@ -18,7 +18,8 @@ from django.apps import apps
 from rest_framework.views import APIView
 import json
 
-#强制token超过一天过期，继承的rest的包
+
+# 强制token超过一天过期，继承的rest的包
 class ObtainAuthToken(APIView):
     throttle_classes = ()
     permission_classes = ()
@@ -41,22 +42,25 @@ class ObtainAuthToken(APIView):
 
 obtain_auth_token = ObtainAuthToken.as_view()
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-        
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class listmodels(APIView):
 
     def get(self, request):
-        #获取model的verbose_name和name的字段
+        # 获取model的verbose_name和name的字段
         appname = request.GET['appname']
         modelname = request.GET['modelname']
-        exclude = {'disks', 'project'}
+        exclude = {'disks', 'project', 'group', 'idc', 'id'}
 
         if appname and modelname:
             modelobj = apps.get_model(appname, modelname)

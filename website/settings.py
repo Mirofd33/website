@@ -119,9 +119,9 @@ AUTHENTICATION_BACKENDS = (
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-#TEMPLATE zh_CN
-FILE_CHARSET='utf-8'
-DEFAULT_CHARSET='utf-8'
+# TEMPLATE zh_CN
+FILE_CHARSET = 'utf-8'
+DEFAULT_CHARSET = 'utf-8'
 
 LANGUAGE_CODE = 'en-us'
 
@@ -131,7 +131,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
