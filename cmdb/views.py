@@ -101,7 +101,7 @@ class HostViewSet(viewsets.ModelViewSet):
             return Response(response_data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data['params'])
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['env'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
         self.perform_create(serializer)
@@ -116,7 +116,7 @@ class HostViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data['params'], partial=partial)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['env'] = IpSource.objects.get(id=env_dispatch(serializer.validated_data['ip']))
         self.perform_update(serializer)
@@ -148,4 +148,3 @@ class HostViewSet(viewsets.ModelViewSet):
             're_per': change_metadata(User.objects.values_list('id', 'first_name'))
         }
         return Response(json.dumps(response_data))
-

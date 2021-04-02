@@ -20,6 +20,7 @@ ASSET_TYPE = (
     (str(2), u"虚拟机"),
     )
 
+
 class env(models.Model):
     env_id = models.IntegerField(u"环境ID",)
     shortname = models.CharField(u"环境名称", max_length=30, null=True)
@@ -41,7 +42,6 @@ class Idc(models.Model):
     jigui = models.CharField(u"机柜信息", max_length=30, null=True)
     ip_range = models.CharField(u"IP范围", max_length=30, null=True)
     bandwidth = models.CharField(u"接入带宽", max_length=30, null=True)
-    
 
     class Meta:
         verbose_name = u'数据中心配置'
@@ -51,6 +51,7 @@ class Idc(models.Model):
 class HostGroup(models.Model):
     name = models.CharField(u"组名", max_length=30, unique=True)
     desc = models.CharField(u"描述", max_length=100, null=True, blank=True)
+
     class Meta:
         verbose_name = u'设备组配置'
         verbose_name_plural = verbose_name
@@ -62,7 +63,6 @@ class IpSource(models.Model):
     describe = models.CharField(max_length=30,null=True)
     env = models.ForeignKey(env,blank=True,null=True)
     area = models.CharField(max_length=30,null=True)
-
 
     class Meta:
         verbose_name = u'环境配置'
@@ -119,7 +119,6 @@ class InterFace(models.Model):
     enddate = models.DateField()
     price = models.IntegerField(verbose_name=u'价格')
 
-
     class Meta:
         verbose_name = u'线路配置'
         verbose_name_plural = verbose_name
@@ -137,8 +136,6 @@ class jenkins_source(models.Model):
     env = models.ForeignKey(env,blank=True,null=True)
     area = models.CharField(max_length=30,null=True)
 
-
     class Meta:
         verbose_name = u'jenkins配置'
         verbose_name_plural = verbose_name
-        

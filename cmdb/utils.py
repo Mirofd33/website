@@ -2,7 +2,6 @@
 import socket, struct
 from cmdb.models import IpSource,Manufactory,jenkins_source
 import re
-from abc import abstractmethod, ABCMeta
 
 
 def format_subnet(subnet_input):

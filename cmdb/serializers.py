@@ -18,7 +18,6 @@ class ListHostSerializer(serializers.ModelSerializer):
     prjname = serializers.SerializerMethodField()
     srvname = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Host
         fields = '__all__'
