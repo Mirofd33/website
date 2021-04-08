@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 from cmdb.models import Host, ASSET_STATUS, ASSET_TYPE
-from publisher.models import projectToHost, serviceToHost
 
 
 rexNum = "^[0-9]*$"
@@ -38,12 +37,12 @@ class ListHostSerializer(serializers.ModelSerializer):
         return dict(ASSET_TYPE)[str(obj.asset_type)] if obj.asset_type else "0"
 
     def get_prjname(self, obj):
-        pn = projectToHost.objects.filter(host=obj.id)
-        return pn[0].Project.name if pn.count() > 0 else "0"
+    #    pn = projectToHost.objects.filter(host=obj.id)
+       return '666'
 
     def get_srvname(self, obj):
-        pn = serviceToHost.objects.filter(host=obj.id)
-        return pn[0].service.name if pn.count() > 0 else "0"
+    #    pn = serviceToHost.objects.filter(host=obj.id)
+        return 666
 
     def __init__(self, *args, **kwargs):
         super(ListHostSerializer, self).__init__(*args, **kwargs)

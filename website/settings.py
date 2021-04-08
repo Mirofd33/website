@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'cmdb.apps.CmdbConfig',
     'publisher.apps.PublisherConfig',
-    'returner.apps.ReturnerConfig',
     'corsheaders'
 ]
 

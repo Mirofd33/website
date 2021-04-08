@@ -6,9 +6,8 @@ rexNum = "^[0-9]*$"
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    #owner = serializers.ReadOnlyField(source='owner.username')
+    # owner = serializers.ReadOnlyField(source='owner.username')
     
     class Meta:
         model = User
-        fields = ('password','username','is_superuser','email')
-    
+        fields = ('password', 'username', 'is_superuser', 'email')

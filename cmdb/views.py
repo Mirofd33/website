@@ -7,7 +7,6 @@ from cmdb.serializers import HostSerializer, ListHostSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from publisher.models import projectToHost, Project
 import json
 from rest_framework.decorators import list_route
 from cmdb.models import ASSET_STATUS, ASSET_TYPE
@@ -137,14 +136,12 @@ class HostViewSet(viewsets.ModelViewSet):
         instance.delete()
 
     @list_route(methods=['get'], url_path='host_filters')
-
-
     def build_result(self, request, pk=None):
         response_data = {
             'status': change_metadata(ASSET_STATUS),
             'type': change_metadata(ASSET_TYPE),
             'env': change_metadata(env.objects.values_list('id', 'fullname')),
-            'prjname': change_metadata(Project.objects.filter(id__in=projectToHost.objects.values('Project').distinct()).values_list('id', 'name').order_by('-id')),
+            #'prjname': change_metadata(Project.objects.filter(id__in=projectToHost.objects.values('Project').distinct()).values_list('id', 'name').order_by('-id')),
             're_per': change_metadata(User.objects.values_list('id', 'first_name'))
         }
         return Response(json.dumps(response_data))
